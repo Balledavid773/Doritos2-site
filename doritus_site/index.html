@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Doritus 2.0</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #6b21a8, #f97316);
+      color: white;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+    }
+    h1 { font-size: 2.5rem; margin-top: 2rem; margin-bottom: 1rem; font-weight: 700; }
+    .buttons {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .btn {
+      background: transparent;
+      border: 2px solid white;
+      color: white;
+      padding: 0.5rem 1rem;
+      cursor: pointer;
+      font-weight: 600;
+      border-radius: 6px;
+      transition: background-color 0.3s, color 0.3s;
+      user-select: none;
+    }
+    .btn:hover { background-color: white; color: #6b21a8; }
+    .btn.active { background-color: white; color: #6b21a8; cursor: default; }
+    .card {
+      background: white;
+      color: black;
+      max-width: 700px;
+      width: 100%;
+      border-radius: 12px;
+      padding: 1rem 1.5rem 2rem;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+    input[type="text"] {
+      padding: 0.7rem 1rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 2px solid #ddd;
+      width: 100%;
+    }
+    input[type="text"]:focus {
+      outline: none;
+      border-color: #6b21a8;
+    }
+    button.generate-btn {
+      background-color: #6b21a8;
+      border: none;
+      color: white;
+      padding: 0.7rem 1.2rem;
+      font-weight: 700;
+      font-size: 1rem;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+    button.generate-btn:hover { background-color: #4c1584; }
+    textarea {
+      min-height: 200px;
+      width: 100%;
+      padding: 1rem;
+      font-size: 1rem;
+      border-radius: 6px;
+      border: 2px solid #ddd;
+      resize: vertical;
+      font-family: inherit;
+    }
+    p.footer {
+      margin-top: 3rem;
+      font-size: 0.9rem;
+      text-align: center;
+      color: white;
+    }
+    p.footer strong { font-weight: 700; }
+    @media (max-width: 480px) {
+      h1 { font-size: 2rem; }
+      .btn { padding: 0.4rem 0.8rem; font-size: 0.9rem; }
+    }
+  </style>
+</head>
+<body>
+  <h1>Doritus 2.0</h1>
+  <div class="buttons">
+    <button class="btn active" data-section="redacao">Redação</button>
+    <button class="btn" data-section="tarefas">Tarefas</button>
+    <button class="btn" data-section="matific">Matific</button>
+    <button class="btn" data-section="leitura">Leitura SP</button>
+  </div>
+  <div class="card">
+    <input type="text" id="temaInput" placeholder="Digite o tema ou pergunta aqui" />
+    <button class="generate-btn" id="generateBtn">Gerar Resposta</button>
+    <textarea id="outputArea" readonly placeholder="A resposta aparecerá aqui..."></textarea>
+  </div>
+  <p class="footer">Feito por: <strong>Baller</strong> e <strong>Chat</strong><br />Use com sabedoria.</p>
+  <script>
+    const buttons = document.querySelectorAll('.btn');
+    const temaInput = document.getElementById('temaInput');
+    const outputArea = document.getElementById('outputArea');
+    const generateBtn = document.getElementById('generateBtn');
+    let currentSection = 'redacao';
+    function setActiveSection(section) {
+      currentSection = section;
+      buttons.forEach(btn => {
+        const isActive = btn.dataset.section === section;
+        btn.classList.toggle('active', isActive);
+      });
+      outputArea.value = '';
+      temaInput.value = '';
+      temaInput.focus();
+    }
+    function handleGenerate() {
+      const tema = temaInput.value.trim();
+      if (!tema) {
+        outputArea.value = 'Digite um tema!';
+        return;
+      }
+      if (currentSection === 'redacao') {
+        outputArea.value = `Redação sobre "${tema}"\n\nIntrodução: O tema "${tema}" é extremamente relevante nos dias atuais...\n\nDesenvolvimento: Esse assunto desperta diversas reflexões importantes...\n\nConclusão: Portanto, é essencial que a sociedade...`;
+      } else if (currentSection === 'tarefas') {
+        outputArea.value = `Resposta possível para a tarefa:\n\nPara a pergunta: ${tema}\n\nExplicação: ...`;
+      } else if (currentSection === 'matific') {
+        outputArea.value = `Resolução passo a passo para:\n\n${tema}\n\nEtapa 1: ...\nEtapa 2: ...\nResultado final: ...`;
+      } else if (currentSection === 'leitura') {
+        outputArea.value = `Resumo e interpretação:\n\nTexto: ${tema}\n\nResumo: ...\nPerguntas respondidas: ...`;
+      }
+    }
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => setActiveSection(btn.dataset.section));
+    });
+    generateBtn.addEventListener('click', handleGenerate);
+    setActiveSection(currentSection);
+  </script>
+</body>
+</html>
